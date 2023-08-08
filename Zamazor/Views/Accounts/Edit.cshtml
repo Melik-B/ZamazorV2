@@ -1,0 +1,57 @@
+﻿@using Business.Models;
+@model UserModel
+
+@{
+    ViewData["Title"] = "Kategori Düzenle";
+}
+<link href="~/css/main.css" rel="stylesheet" />
+<h1>@ViewData["Title"]</h1>
+
+<h4>Kategori</h4>
+<hr />
+<div class="row">
+    <div class="col-12">
+
+        <form asp-action="Edit" asp-controller="Categories" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row mb-3">
+
+                <label asp-for="Firstname" class="col-2 col-form-label"></label>
+
+                <div class="col-5">
+
+                    <input asp-for="Firstname" class="form-control" type="text" />
+
+                    <span asp-validation-for="Firstname" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="Lastname" class="col-2 col-form-label"></label>
+                <div class="col-5">
+
+                    <textarea asp-for="Lastname" class="form-control" rows="3"></textarea>
+
+                    <span asp-validation-for="Lastname" class="text-danger"></span>
+                </div>
+            </div>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row mb-3">
+                <div class="offset-2 col-5">
+                    <input type="submit" value="Kaydet" class="btn btn-primary" />
+                    &nbsp;&nbsp;
+                    <button type="reset" class="btn btn-outline-primary">Temizle</button>
+                    &nbsp;&nbsp;
+
+                    <a asp-action="Index">Kategori Listesi</a>
+                </div>
+            </div>
+
+            @* }*@
+        </form>
+    </div>
+</div>

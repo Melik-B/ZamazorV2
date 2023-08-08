@@ -1,0 +1,133 @@
+﻿@using Business.Models;
+@using DataAccess.Enums;
+@model UserRegistrationModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Kayit">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row mb-3">
+                <label asp-for="Firstname" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="Firstname" class="form-control" />
+                    <span asp-validation-for="Firstname" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="Lastname" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="Lastname" class="form-control" />
+                    <span asp-validation-for="Lastname" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="Username" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="Password" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="Password" class="form-control" type="password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label asp-for="ConfirmPassword" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="Email" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="Email" class="form-control" type="email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="Address" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <textarea asp-for="Address" class="form-control"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="Gender" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <input asp-for="Gender" type="radio" value="@((int)Gender.Female)" checked /> @Gender.Female
+                    &nbsp;
+                    <input asp-for="Gender" type="radio" value="@((int)Gender.Male)" /> @Gender.Male
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="CountryId" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <select asp-for="CountryId" asp-items="ViewBag.Countries" class="form-control">
+                        <option value="">-- Seçiniz --</option>
+                    </select>
+                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label asp-for="CityId" class="col-2 col-form-label"></label>
+                <div class="col-5">
+                    <select asp-for="CityId" asp-items="ViewBag.Cities" class="form-control">
+                        <option value="">-- Ülke Seçiniz --</option>
+                    </select>
+                    <span asp-validation-for="CityId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="offset-2 col-5">
+                    <input type="submit" value="Kaydet" class="btn btn-primary" />
+                    &nbsp;&nbsp;
+                    <button type="reset" class="btn btn-outline-primary">Temizle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            $("#countries").change(function() {
+                var selectedCountryId = $("#countries").val();
+                $(".cities").empty();
+                if (selectedCountryId == "") {
+                    $("#countryMsg").text("Please select a country...");
+                    $(".cities").append('<option value="">-- Select Country --</option>');
+                }
+                else {
+                    $.getJSON(
+                        "/Cities/GetCities",
+                        { countryId: selectedCountryId },
+                        function(cities) {
+                            $(".cities").append('<option value="">-- Select City --</option>');
+                            for (var i = 0; i < cities.length; i++) {
+                                $(".cities").append('<option value="' + cities[i].id + '">' + cities[i].name + '</option>');
+                            }
+                        }
+                    );
+                }
+            });
+        });
+    </script>
+}
